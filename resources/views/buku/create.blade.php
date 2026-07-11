@@ -1,0 +1,91 @@
+@extends('layouts.app')
+@section('title','Tambah Buku')
+@section('page-title','Tambah Buku')
+@section('content')
+<div class="page-header animate-fade-up">
+    <div class="page-header-left">
+        <h1 class="page-title">Tambah Buku Baru</h1>
+        <p class="page-subtitle">Isi data buku yang akan ditambahkan ke koleksi</p>
+    </div>
+    <a href="{{ route('buku.index') }}" class="btn btn-sm btn-outline-secondary">
+        <i class="bi bi-arrow-left"></i> Kembali
+    </a>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-12 col-lg-8">
+        <div class="content-card animate-fade-up">
+            <div class="content-card-header">
+                <h6 class="content-card-title"><i class="bi bi-book-fill"></i> Form Data Buku</h6>
+            </div>
+            <div class="content-card-body">
+                <form method="POST" action="{{ route('buku.store') }}" enctype="multipart/form-data">
+                    @csrf
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Kode Buku <span class="text-danger">*</span></label>
+                            <input type="text" name="kode_buku" class="form-control @error('kode_buku') is-invalid @enderror"
+                                   value="{{ old('kode_buku') }}" placeholder="Contoh: BK011" required>
+                            @error('kode_buku')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Tahun Terbit <span class="text-danger">*</span></label>
+                            <input type="number" name="tahun" class="form-control @error('tahun') is-invalid @enderror"
+                                   value="{{ old('tahun', date('Y')) }}" min="1900" max="{{ date('Y') }}" required>
+                            @error('tahun')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label">Judul Buku <span class="text-danger">*</span></label>
+                            <input type="text" name="judul" class="form-control @error('judul') is-invalid @enderror"
+                                   value="{{ old('judul') }}" placeholder="Masukkan judul buku" required>
+                            @error('judul')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Penulis <span class="text-danger">*</span></label>
+                            <input type="text" name="penulis" class="form-control @error('penulis') is-invalid @enderror"
+                                   value="{{ old('penulis') }}" placeholder="Nama penulis" required>
+                            @error('penulis')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Penerbit <span class="text-danger">*</span></label>
+                            <input type="text" name="penerbit" class="form-control @error('penerbit') is-invalid @enderror"
+                                   value="{{ old('penerbit') }}" placeholder="Nama penerbit" required>
+                            @error('penerbit')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Stok <span class="text-danger">*</span></label>
+                            <input type="number" name="stok" class="form-control @error('stok') is-invalid @enderror"
+                                   value="{{ old('stok', 1) }}" min="0" required>
+                            @error('stok')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                        </div>
+                        <div class="col-md-8">
+                            <label class="form-label">Cover Buku <small class="text-muted">(opsional, maks 2MB)</small></label>
+                            <input type="file" name="cover" class="form-control @error('cover') is-invalid @enderror"
+                                   accept="image/*" id="coverInput">
+                            @error('cover')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                            <div id="coverPreview" class="mt-2" style="display:none;">
+                                <img id="previewImg" src="" style="height:80px;border-radius:6px;border:1px solid var(--card-border);" alt="Preview">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-4 d-flex gap-2">
+                        <button type="submit" class="btn btn-primary"><i class="bi bi-check-lg"></i> Simpan Buku</button>
+                        <a href="{{ route('buku.index') }}" class="btn btn-outline-secondary">Batal</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+@endsection
+@section('scripts')
+<script>
+document.getElementById('coverInput').addEventListener('change', function() {
+    const file = this.files[0];
+    if (file) {
+        document.getElementById('previewImg').src = URL.createObjectURL(file);
+        document.getElementById('coverPreview').style.display = 'block';
+    }
+});
+</script>
+@endsection
